@@ -20,8 +20,8 @@ export default function CheckboxField({
         <div className="mb-4 flex items-start space-x-3">
             <Checkbox
                 id={fieldName}
-                checked={value ?? false}
-                onChange={(e) => onChange((e.currentTarget as HTMLInputElement).checked)}
+                checked={value}
+                onChange={() => onChange(!value)}
                 className="mt-1"
             />
             <div className="grid gap-1.5 leading-none">

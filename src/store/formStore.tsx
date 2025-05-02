@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import categories from "@/data";
 import { FormValues } from "@/types/form";
-import { slugify } from "@/lib/utils";
+// import { slugify } from "@/lib/utils";
 
 export interface FormProgress {
     completedPages: {
@@ -29,32 +29,32 @@ interface FormStore extends FormProgress {
 }
 
 // Function to check if all required fields in a form are filled
-const areAllRequiredFieldsFilled = (
-    formData: FormValues,
-    categoryValue: string,
-    pageValue: string
-): boolean => {
-    const category = categories.find((cat) => cat.value === categoryValue);
-    const page = category?.pages.find((p) => p.value === pageValue);
+// const areAllRequiredFieldsFilled = (
+//     formData: FormValues,
+//     categoryValue: string,
+//     pageValue: string
+// ): boolean => {
+//     const category = categories.find((cat) => cat.value === categoryValue);
+//     const page = category?.pages.find((p) => p.value === pageValue);
 
-    if (!page) return false;
+//     if (!page) return false;
 
-    // Check if all required fields have values
-    return page.fields
-        .filter((field) => field.required)
-        .every((field) => {
-            const fieldName = slugify(field.name);
-            const value = formData[fieldName];
+//     // Check if all required fields have values
+//     return page.fields
+//         .filter((field) => field.required)
+//         .every((field) => {
+//             const fieldName = slugify(field.name);
+//             const value = formData[fieldName];
 
-            // For checkboxes, boolean false is a valid value
-            if (field.type === "checkbox") {
-                return value !== undefined;
-            }
+//             // For checkboxes, boolean false is a valid value
+//             if (field.type === "checkbox") {
+//                 return value !== undefined;
+//             }
 
-            // For all other field types, check if value exists and is not an empty string
-            return value !== undefined && value !== "";
-        });
-};
+//             // For all other field types, check if value exists and is not an empty string
+//             return value !== undefined && value !== "";
+//         });
+// };
 
 export const useFormStore = create<FormStore>()(
     persist(

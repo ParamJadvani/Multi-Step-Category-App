@@ -1,46 +1,52 @@
-// data/index.ts
+// src/data/index.ts
+import { slugify } from "@/lib/utils";
 
-export type FieldType =
-    | "text"
-    | "email"
-    | "password"
-    | "number"
-    | "tel"
-    | "radio"
-    | "select"
-    | "checkbox"
-    | "textarea";
-
-export type Field = {
+export interface Field {
     name: string;
-    type: FieldType;
-    required: boolean;
-    options?: string[];
+    type:
+        | "text"
+        | "email"
+        | "number"
+        | "tel"
+        | "textarea"
+        | "select"
+        | "radio"
+        | "checkbox"
+        | "password"; // Added password
+    required?: boolean;
     placeholder?: string;
-};
+    options?: string[];
+}
 
-export type Page = {
+export interface Page {
     name: string;
-    value: string;
+    value: string; // Unique value for the page (e.g., slug)
     fields: Field[];
-};
+}
 
-export type Category = {
+export interface Category {
     name: string;
-    value: string;
-    protected: boolean;
+    value: string; // Unique value for the category (e.g., slug)
     pages: Page[];
-};
+}
 
-const categories: Category[] = [
+// Define the raw data structure clearly
+interface RawPageData {
+    name: string;
+    fields: Field[];
+}
+
+interface RawCategoryData {
+    name: string;
+    pages: RawPageData[];
+}
+
+const rawCategoriesData: RawCategoryData[] = [
     {
-        name: "User Registration",
-        value: "user-registration",
-        protected: false,
+        name: "Personal Information",
         pages: [
             {
-                name: "Account Info",
-                value: "account-info",
+                name: "Basic Details",
                 fields: [
                     {
                         name: "Full Name",
@@ -49,220 +55,108 @@ const categories: Category[] = [
                         placeholder: "Enter your full name",
                     },
                     {
-                        name: "Email",
+                        name: "Email Address",
                         type: "email",
                         required: true,
-                        placeholder: "you@example.com",
+                        placeholder: "your.email@example.com",
                     },
-                    { name: "Password", type: "password", required: true },
-                    { name: "Confirm Password", type: "password", required: true },
                 ],
             },
             {
-                name: "Profile Details",
-                value: "profile-details",
+                name: "Contact Details",
                 fields: [
-                    {
-                        name: "Username",
-                        type: "text",
-                        required: true,
-                        placeholder: "Choose a username",
-                    },
                     {
                         name: "Phone Number",
                         type: "tel",
-                        required: false,
-                        placeholder: "Optional phone number",
-                    },
-                    { name: "Country", type: "text", required: false },
-                    { name: "City", type: "text", required: false },
-                ],
-            },
-            {
-                name: "Preferences",
-                value: "preferences",
-                fields: [
-                    {
-                        name: "Preferred Language",
-                        type: "select",
-                        required: false,
-                        options: ["English", "Spanish", "French", "German"],
-                    },
-                    {
-                        name: "Communication Method",
-                        type: "radio",
                         required: true,
-                        options: ["Email", "SMS", "Phone Call"],
+                        placeholder: "e.g., +1 123 456 7890",
                     },
-                    { name: "Subscribe to Newsletter", type: "checkbox", required: false },
-                ],
-            },
-        ],
-    },
-    {
-        name: "Job Application",
-        value: "job-application",
-        protected: true,
-        pages: [
-            {
-                name: "Personal Info",
-                value: "personal-info",
-                fields: [
-                    { name: "First Name", type: "text", required: true },
-                    { name: "Last Name", type: "text", required: true },
                     {
-                        name: "Applicant Email",
-                        type: "email",
-                        required: true,
-                        placeholder: "applicant@email.com",
-                    },
-                    { name: "Contact Phone", type: "tel", required: true },
-                ],
-            },
-            {
-                name: "Education History",
-                value: "education-history",
-                fields: [
-                    {
-                        name: "Highest Degree Achieved",
+                        name: "Country",
                         type: "select",
                         required: true,
-                        options: [
-                            "High School",
-                            "Associate's",
-                            "Bachelor's",
-                            "Master's",
-                            "Doctorate",
-                        ],
+                        options: ["USA", "Canada", "UK", "Australia", "Other"],
                     },
+                ],
+            },
+            {
+                name: "Address",
+                fields: [
                     {
-                        name: "Field of Study",
+                        name: "Street Address",
                         type: "text",
                         required: true,
-                        placeholder: "e.g., Computer Science",
+                        placeholder: "123 Main St",
                     },
-                    { name: "University Name", type: "text", required: false },
-                    {
-                        name: "Graduation Year",
-                        type: "number",
-                        required: false,
-                        placeholder: "YYYY",
-                    },
-                ],
-            },
-            {
-                name: "Work Experience",
-                value: "work-experience",
-                fields: [
-                    { name: "Most Recent Company", type: "text", required: false },
-                    { name: "Job Title", type: "text", required: false },
-                    { name: "Years Worked", type: "number", required: false },
-                    {
-                        name: "Job Description",
-                        type: "textarea",
-                        required: false,
-                        placeholder: "Briefly describe your responsibilities",
-                    },
-                ],
-            },
-            {
-                name: "Application Preferences",
-                value: "application-preferences",
-                fields: [
-                    {
-                        name: "Desired Salary Range",
-                        type: "select",
-                        required: false,
-                        options: ["$40k-$60k", "$60k-$80k", "$80k-$100k", "$100k+"],
-                    },
-                    {
-                        name: "Willing to Relocate",
-                        type: "radio",
-                        required: true,
-                        options: ["Yes", "No", "Maybe"],
-                    },
-                    {
-                        name: "Remote Work",
-                        type: "checkbox",
-                        required: false,
-                        options: ["Open to remote"],
-                    },
+                    { name: "City", type: "text", required: true, placeholder: "Anytown" },
+                    { name: "Postal Code", type: "text", required: true, placeholder: "12345" },
                 ],
             },
         ],
     },
     {
-        name: "Product Feedback",
-        value: "product-feedback",
-        protected: false,
+        name: "Preferences",
         pages: [
             {
-                name: "Product Usage",
-                value: "product-usage",
+                name: "Notification Settings",
                 fields: [
+                    { name: "Receive Email Updates", type: "checkbox", required: false },
                     {
-                        name: "Product Used",
-                        type: "select",
-                        required: true,
-                        options: ["Product A", "Product B", "Product C"],
-                    },
-                    {
-                        name: "Frequency of Use",
+                        name: "Preferred Contact Method",
                         type: "radio",
                         required: true,
-                        options: ["Daily", "Weekly", "Monthly", "Rarely"],
-                    },
-                    {
-                        name: "Primary Use Case",
-                        type: "textarea",
-                        required: false,
-                        placeholder: "How do you primarily use the product?",
+                        options: ["Email", "Phone", "SMS"],
                     },
                 ],
             },
             {
-                name: "Satisfaction Survey",
-                value: "satisfaction-survey",
+                name: "Interests",
                 fields: [
                     {
-                        name: "Overall Satisfaction",
-                        type: "radio",
-                        required: true,
-                        options: [
-                            "Very Satisfied",
-                            "Satisfied",
-                            "Neutral",
-                            "Dissatisfied",
-                            "Very Dissatisfied",
-                        ],
-                    },
-                    {
-                        name: "Likelihood to Recommend",
+                        name: "Primary Interest",
                         type: "select",
                         required: true,
-                        options: [
-                            "10 - Extremely Likely",
-                            "9",
-                            "8",
-                            "7",
-                            "6",
-                            "5",
-                            "4",
-                            "3",
-                            "2",
-                            "1 - Not at all Likely",
-                        ],
+                        options: ["Technology", "Sports", "Arts", "Music", "Travel"],
                     },
                     {
-                        name: "Feature Request",
+                        name: "Feedback",
                         type: "textarea",
                         required: false,
-                        placeholder: "Any features you'd like to see?",
+                        placeholder: "Any additional feedback?",
+                    },
+                ],
+            },
+            {
+                name: "Account Security",
+                fields: [
+                    { name: "Enable Two-Factor Auth", type: "checkbox", required: false },
+                    {
+                        name: "Security Question",
+                        type: "text",
+                        required: true,
+                        placeholder: "e.g., Mother's maiden name?",
+                    },
+                    {
+                        name: "Security Answer",
+                        type: "password",
+                        required: true,
+                        placeholder: "Your secret answer",
                     },
                 ],
             },
         ],
     },
 ];
+
+// Generate the final categories array with slugs (values)
+const categories: Category[] = rawCategoriesData.map((categoryData) => ({
+    name: categoryData.name, // Keep the name
+    value: slugify(categoryData.name), // Generate category slug
+    pages: categoryData.pages.map((pageData) => ({
+        name: pageData.name, // Keep the name
+        value: slugify(pageData.name), // Generate page slug
+        fields: pageData.fields, // Keep the fields
+    })),
+}));
 
 export default categories;
