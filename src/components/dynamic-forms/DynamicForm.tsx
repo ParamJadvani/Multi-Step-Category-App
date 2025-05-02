@@ -35,17 +35,18 @@ export default function DynamicForm({ pageData, categoryValue }: DynamicFormProp
         const existingData = getFormData(categoryValue);
         const pageFieldNames = pageData.fields.map((field) => slugify(field.name));
         const pageValues: FormValues = {};
+
         for (const key of pageFieldNames) {
+            console.log(existingData[key], existingData, key);
             if (existingData[key] !== undefined) {
                 pageValues[key] = existingData[key];
             }
         }
+        console.log(pageValues);
         setFormValues(pageValues);
     }, [pageData, categoryValue, getFormData]);
 
     const handleChange = (fieldName: string, value: number | string | boolean) => {
-        console.log("Field Name:", fieldName);
-        console.log("Value:", value);
         setFormValues((prev) => ({ ...prev, [fieldName]: value }));
         setValidationError(null);
     };
@@ -82,7 +83,6 @@ export default function DynamicForm({ pageData, categoryValue }: DynamicFormProp
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Form Data:", formValues);
         if (!validateForm()) {
             return;
         }

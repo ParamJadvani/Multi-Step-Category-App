@@ -1,7 +1,7 @@
 // src/lib/utils.ts
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import categories, { Category, Page } from "@/data"; // Import categories and types
+import categories, { Category, Page } from "@/data";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -12,14 +12,13 @@ export function slugify(text: string): string {
         .toString()
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-") // Replace spaces with -
-        .replace(/[^\w\-]+/g, "") // Remove all non-word chars
-        .replace(/\-\-+/g, "-") // Replace multiple - with single -
-        .replace(/^-+/, "") // Trim - from start of text
-        .replace(/-+$/, ""); // Trim - from end of text
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-")
+        .replace(/^-+/, "")
+        .replace(/-+$/, "");
 }
 
-// Finds the category and page objects based on their slug values
 export function findCategoryAndPage(
     categoryValue: string,
     pageValue: string

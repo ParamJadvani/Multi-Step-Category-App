@@ -41,12 +41,6 @@ export default function FormField({ fieldConfig, value, onChange, fieldName }: F
                     fieldName={fieldName}
                 />
             );
-        case "textarea":
-        case "text":
-        case "email":
-        case "password":
-        case "number":
-        case "tel":
         default:
             return (
                 <InputField

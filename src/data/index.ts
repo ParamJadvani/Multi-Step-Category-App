@@ -12,7 +12,7 @@ export interface Field {
         | "select"
         | "radio"
         | "checkbox"
-        | "password"; // Added password
+        | "password";
     required?: boolean;
     placeholder?: string;
     options?: string[];
@@ -20,17 +20,16 @@ export interface Field {
 
 export interface Page {
     name: string;
-    value: string; // Unique value for the page (e.g., slug)
+    value: string;
     fields: Field[];
 }
 
 export interface Category {
     name: string;
-    value: string; // Unique value for the category (e.g., slug)
+    value: string;
     pages: Page[];
 }
 
-// Define the raw data structure clearly
 interface RawPageData {
     name: string;
     fields: Field[];
@@ -148,14 +147,13 @@ const rawCategoriesData: RawCategoryData[] = [
     },
 ];
 
-// Generate the final categories array with slugs (values)
 const categories: Category[] = rawCategoriesData.map((categoryData) => ({
-    name: categoryData.name, // Keep the name
-    value: slugify(categoryData.name), // Generate category slug
+    name: categoryData.name,
+    value: slugify(categoryData.name),
     pages: categoryData.pages.map((pageData) => ({
-        name: pageData.name, // Keep the name
-        value: slugify(pageData.name), // Generate page slug
-        fields: pageData.fields, // Keep the fields
+        name: pageData.name,
+        value: slugify(pageData.name),
+        fields: pageData.fields,
     })),
 }));
 
