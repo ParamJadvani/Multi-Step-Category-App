@@ -1,6 +1,6 @@
 // src/app/dashboard/[categoryValue]/[pageValue]/page.tsx
 
-import CLientDashboard from "@/components/ClientDashboard";
+import ClientDashboard from "@/components/ClientDashboard";
 
 interface DynamicFormPageProps {
     params: Promise<{
@@ -11,5 +11,5 @@ interface DynamicFormPageProps {
 
 export default async function DynamicFormPage({ params }: DynamicFormPageProps) {
     const { categoryValue, pageValue } = await params;
-    return <CLientDashboard categoryValue={categoryValue} pageValue={pageValue} />;
+    return <ClientDashboard categoryValue={categoryValue} pageValue={pageValue} />;
 }
