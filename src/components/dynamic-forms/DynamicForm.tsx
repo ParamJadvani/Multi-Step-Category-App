@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Page } from "@/data";
-import { slugify } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { FormValues } from "@/types/form";
 import { useFormStore } from "@/store/formStore";
@@ -33,16 +32,15 @@ export default function DynamicForm({ pageData, categoryValue }: DynamicFormProp
     useEffect(() => {
         setIsMounted(true);
         const existingData = getFormData(categoryValue);
-        const pageFieldNames = pageData.fields.map((field) => slugify(field.name));
+        const pageFieldNames = pageData.fields.map((field) => field.value);
         const pageValues: FormValues = {};
 
         for (const key of pageFieldNames) {
-            console.log(existingData[key], existingData, key);
+        
             if (existingData[key] !== undefined) {
                 pageValues[key] = existingData[key];
             }
         }
-        console.log(pageValues);
         setFormValues(pageValues);
     }, [pageData, categoryValue, getFormData]);
 
@@ -54,7 +52,7 @@ export default function DynamicForm({ pageData, categoryValue }: DynamicFormProp
     const validateForm = (): boolean => {
         for (const field of pageData.fields) {
             if (field.required) {
-                const fieldName = slugify(field.name);
+                const fieldName = field.value;
                 const value = formValues[fieldName];
 
                 if (
@@ -135,7 +133,7 @@ export default function DynamicForm({ pageData, categoryValue }: DynamicFormProp
                 <form onSubmit={onSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         {pageData.fields.map((field) => {
-                            const fieldName = slugify(field.name);
+                            const fieldName = field.value;
                             return (
                                 <FormField
                                     key={fieldName}
